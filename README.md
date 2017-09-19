@@ -1,2 +1,2 @@
 # theano-dev
-Practical developing with Theano.
+Practical developing solutions and API's with Theano library.
