@@ -133,13 +133,25 @@ class ANN_relu(object):
 			accur = np.mean(prediction_val==Y)
 			cost.append(cost_val)
 			if i % 100 == 0:
-				print("Epoch: %d   Cost: %.4f   Accuracy: %.4f" % (i, cost_val, accur))
+				print("Epoch: %d  Cost: %.4f  Accuracy: %.4f" % (i, cost_val, accur))
 
 
 		end = time.time()
-		print('\nElapsed time: %.2f min' % ((end-start)/60))
-		plt.plot(cost)
-		plt.show()
+		self.elapsed_t = (end-start)/60 # total elapsed time
+		self.cost = cost # stores all cost values 
+
+		print('\nOptimization complete')
+		print('\nElapsed time: {:.3f} min'.format(self.elapsed_t))
+
+
+		# customized plot with the resulting cost values
+		if show_fig: 
+			plt.plot(cost, label='Cost function J')
+			plt.title('Evolution of the Cost through a GD optimization in Theano    Total runtime: {:.3f} min'.format(self.elapsed_t)+'    Final Accuracy: {:.3f}'.format(np.mean(Y==self.predict(X))))
+			plt.xlabel('Epochs')
+			plt.ylabel('Cost')
+			plt.legend()
+			plt.show()
 
 
 
