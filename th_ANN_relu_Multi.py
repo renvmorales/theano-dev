@@ -82,8 +82,8 @@ class ANN_relu(object):
 		updt_W = []
 		updt_b = []
 		for i in range(len(W)):
-			updt_W.append(W[i] - alpha*T.grad(J, W[i]))
-			updt_b.append(b[i] - alpha*T.grad(J, b[i]))
+			updt_W.append(W[i] - alpha*(T.grad(J, W[i])) + reg/(2*N)*W[-i])
+			updt_b.append(b[i] - alpha*(T.grad(J, b[i])) + reg/(2*N)*b[-i])
 
 
 		# generate a list of tuples with weights and the update expression
