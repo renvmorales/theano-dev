@@ -82,8 +82,8 @@ class ANN_relu(object):
 		updt_W = []
 		updt_b = []
 		for i in range(len(W)):
-			updt_W.append(W[i] - alpha*(T.grad(J, W[i])) + reg/(2*N)*W[-i])
-			updt_b.append(b[i] - alpha*(T.grad(J, b[i])) + reg/(2*N)*b[-i])
+			updt_W.append(W[i] - alpha*(T.grad(J, W[i]) + reg/(2*N)*W[i]))
+			updt_b.append(b[i] - alpha*(T.grad(J, b[i]) + reg/(2*N)*b[i]))
 
 
 		# generate a list of tuples with weights and the update expression
@@ -100,22 +100,19 @@ class ANN_relu(object):
 		ls_updt = [(param[i], upd_param[i]) for i in range(len(param))]
 
 
-		#  define a training function for the model (updating weights)
+
+		# define a training function for the model using updating rules
+		# (produces 2 outputs - cost and prediction)
 		train = theano.function(
 			inputs=[thX, thT],
+			outputs=[J, prediction],
 			updates=ls_updt
 		)
 
 
-		# define a prediction function for the model 
-		# (this scheme with double outputs is faster)
-		get_cost_pred = theano.function(
-			inputs=[thX, thT],
-			outputs=[J, prediction]
-		)
-		
 
-		# returns only a prediction for the model (used as another method)
+		# this function only returns a prediction for the model 
+		# (should be used as part of another method)
 		self.get_prediction = theano.function(
 			inputs=[thX],
 			outputs=prediction
@@ -128,8 +125,7 @@ class ANN_relu(object):
 
 		# optimization loop
 		for i in range(epochs):
-			cost_val, prediction_val = get_cost_pred(X, Trgt)
-			train(X, Trgt)
+			cost_val, prediction_val = train(X, Trgt)
 			accur = np.mean(prediction_val==Y)
 			cost.append(cost_val)
 			if i % 100 == 0:
