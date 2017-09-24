@@ -11,7 +11,7 @@ def init_weights(R, S):
 	W = np.random.randn(R,S)/np.sqrt(R+S) # Xavier initialization
 	b = np.random.rand(S)
 	# b = np.zeros(S)
-	return W.astype(np.float32), b.astype(np.float32)
+	return W, b
 
 
 
